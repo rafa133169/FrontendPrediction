@@ -2,68 +2,136 @@ import React, { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, LineChart, Line } from 'recharts';
 import { User, Brain, Clock, Globe, Heart, GraduationCap, Smartphone, TrendingUp, AlertTriangle, CheckCircle, BarChart3, PieChartIcon, Activity, Users } from 'lucide-react';
 
-interface PredictionData {
-  afectaRendimientoAcademico: string;
-  conflictosPorRedesSociales: string;
+interface FormData {
   edad: number;
-  estadoSentimental: string;
   genero: string;
-  horasSuenoPorNoche: number;
   nivelAcademico: string;
   pais: string;
-  plataformaMasUsada: string;
   usoDialioHoras: number;
+  plataformaMasUsada: string;
+  afectaRendimientoAcademico: string;
+  horasSuenoPorNoche: number;
+  estadoSentimental: string;
+  conflictosPorRedesSociales: string;
+}
+
+interface Results {
+  nivelAdiccion: number;
+  saludMental: number;
+  impactoAcademico: string;
+  plataformaDominante: string;
+  recomendaciones: string[];
+  predictions: {
+    pred1: number;
+    pred2: number;
+    pred3: number;
+    pred4: number;
+    pred5: number;
+    pred6: number;
+    pred7: number;
+    pred8: number;
+  };
+}
+
+interface StoredData {
+  formData: FormData;
+  results: Results;
 }
 
 const Dashboard: React.FC = () => {
   const [activeView, setActiveView] = useState('overview');
-  const [predictionData, setPredictionData] = useState<PredictionData | null>(null);
+  const [storedData, setStoredData] = useState<StoredData | null>(null);
   const [loading, setLoading] = useState(true);
   
   useEffect(() => {
-    // Obtener datos del localStorage al cargar el componente
     const savedData = localStorage.getItem('predictionData');
     
     if (savedData) {
       try {
-        const parsedData = JSON.parse(savedData);
-        setPredictionData(parsedData);
+        const parsedData = JSON.parse(savedData) as StoredData;
+        setStoredData(parsedData);
       } catch (error) {
         console.error('Error al parsear datos del localStorage:', error);
         // Datos por defecto en caso de error
-        setPredictionData({
-          afectaRendimientoAcademico: "No",
-          conflictosPorRedesSociales: "Sí",
-          edad: 23,
-          estadoSentimental: "Soltero(a)",
-          genero: "Masculino",
-          horasSuenoPorNoche: 3,
-          nivelAcademico: "Graduate",
-          pais: "Argentina",
-          plataformaMasUsada: "TikTok",
-          usoDialioHoras: 3
+        setStoredData({
+          formData: {
+            edad: 23,
+            genero: "Masculino",
+            nivelAcademico: "Graduate",
+            pais: "Argentina",
+            usoDialioHoras: 3,
+            plataformaMasUsada: "TikTok",
+            afectaRendimientoAcademico: "Sí",
+            horasSuenoPorNoche: 5,
+            estadoSentimental: "Soltero(a)",
+            conflictosPorRedesSociales: "Sí"
+          },
+          results: {
+            nivelAdiccion: 2.5,
+            saludMental: 8.9,
+            impactoAcademico: "Alto",
+            plataformaDominante: "TikTok",
+            recomendaciones: [
+              "Mejora tus hábitos de sueño evitando pantallas antes de dormir",
+              "Practica el uso consciente de redes sociales",
+              "Crea espacios libres de distracciones digitales para estudiar"
+            ],
+            predictions: {
+              pred1: 2.51,
+              pred2: 8.93,
+              pred3: 1.06,
+              pred4: 2.51,
+              pred5: 0.58,
+              pred6: 2,
+              pred7: 61,
+              pred8: 3.68
+            }
+          }
         });
       }
     } else {
       // Datos por defecto si no hay nada en localStorage
-      setPredictionData({
-        afectaRendimientoAcademico: "No",
-        conflictosPorRedesSociales: "Sí",
-        edad: 23,
-        estadoSentimental: "Soltero(a)",
-        genero: "Masculino",
-        horasSuenoPorNoche: 3,
-        nivelAcademico: "Graduate",
-        pais: "Argentina",
-        plataformaMasUsada: "TikTok",
-        usoDialioHoras: 3
+      setStoredData({
+        formData: {
+          edad: 23,
+          genero: "Masculino",
+          nivelAcademico: "Graduate",
+          pais: "Argentina",
+          usoDialioHoras: 3,
+          plataformaMasUsada: "TikTok",
+          afectaRendimientoAcademico: "Sí",
+          horasSuenoPorNoche: 5,
+          estadoSentimental: "Soltero(a)",
+          conflictosPorRedesSociales: "Sí"
+        },
+        results: {
+          nivelAdiccion: 2.5,
+          saludMental: 8.9,
+          impactoAcademico: "Alto",
+          plataformaDominante: "TikTok",
+          recomendaciones: [
+            "Mejora tus hábitos de sueño evitando pantallas antes de dormir",
+            "Practica el uso consciente de redes sociales",
+            "Crea espacios libres de distracciones digitales para estudiar"
+          ],
+          predictions: {
+            pred1: 2.51,
+            pred2: 8.93,
+            pred3: 1.06,
+            pred4: 2.51,
+            pred5: 0.58,
+            pred6: 2,
+            pred7: 61,
+            pred8: 3.68
+          }
+        }
       });
     }
     
     setLoading(false);
   }, []);
 
-  // Datos simulados para gráficas (podrías mover esto al localStorage si lo necesitas)
+  // Datos simulados para gráficas
   const ageDistribution = [
     { age: '18-20', count: 25 },
     { age: '21-23', count: 45 },
@@ -87,11 +155,36 @@ const Dashboard: React.FC = () => {
   ];
 
   const radarData = [
-    { subject: 'Horas de Sueño', current: predictionData?.horasSuenoPorNoche || 3, ideal: 8, fullMark: 10 },
-    { subject: 'Uso Diario', current: predictionData?.usoDialioHoras || 3, ideal: 2, fullMark: 10 },
-    { subject: 'Conflictos', current: predictionData?.conflictosPorRedesSociales === 'Sí' ? 8 : 2, ideal: 2, fullMark: 10 },
-    { subject: 'Rendimiento', current: predictionData?.afectaRendimientoAcademico === 'Sí' ? 4 : 7, ideal: 9, fullMark: 10 },
-    { subject: 'Bienestar', current: 5, ideal: 9, fullMark: 10 }
+    { 
+      subject: 'Horas de Sueño', 
+      current: storedData?.formData.horasSuenoPorNoche || 5, 
+      ideal: 8, 
+      fullMark: 10 
+    },
+    { 
+      subject: 'Uso Diario', 
+      current: storedData?.formData.usoDialioHoras || 3, 
+      ideal: 2, 
+      fullMark: 10 
+    },
+    { 
+      subject: 'Conflictos', 
+      current: storedData?.formData.conflictosPorRedesSociales === 'Sí' ? 8 : 2, 
+      ideal: 2, 
+      fullMark: 10 
+    },
+    { 
+      subject: 'Rendimiento', 
+      current: storedData?.formData.afectaRendimientoAcademico === 'Sí' ? 4 : 7, 
+      ideal: 9, 
+      fullMark: 10 
+    },
+    { 
+      subject: 'Bienestar', 
+      current: storedData?.results.saludMental || 5, 
+      ideal: 9, 
+      fullMark: 10 
+    }
   ];
 
   const usageByCountry = [
@@ -137,38 +230,38 @@ const Dashboard: React.FC = () => {
   );
 
   const OverviewView = () => {
-    if (!predictionData) return <div>Cargando datos...</div>;
+    if (!storedData) return <div>Cargando datos...</div>;
     
     return (
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <StatCard 
-            title="Edad Promedio" 
-            value={`${predictionData.edad} años`} 
+            title="Edad" 
+            value={`${storedData.formData.edad} años`} 
             icon={User} 
             color="bg-gradient-to-br from-purple-100 to-purple-200"
-            trend="+2.3% vs mes anterior"
+            trend={`Nivel adicción: ${storedData.results.nivelAdiccion}`}
           />
           <StatCard 
             title="Horas de Sueño" 
-            value={`${predictionData.horasSuenoPorNoche}h`} 
+            value={`${storedData.formData.horasSuenoPorNoche}h`} 
             icon={Clock} 
             color="bg-gradient-to-br from-blue-100 to-blue-200"
-            trend="Crítico"
+            trend={storedData.formData.horasSuenoPorNoche < 6 ? "Crítico" : "Moderado"}
           />
           <StatCard 
             title="Uso Diario" 
-            value={`${predictionData.usoDialioHoras}h`} 
+            value={`${storedData.formData.usoDialioHoras}h`} 
             icon={Smartphone} 
             color="bg-gradient-to-br from-green-100 to-green-200"
-            trend="Moderado"
+            trend={`Salud mental: ${storedData.results.saludMental}`}
           />
           <StatCard 
             title="Conflictos" 
-            value={predictionData.conflictosPorRedesSociales} 
+            value={storedData.formData.conflictosPorRedesSociales} 
             icon={AlertTriangle} 
             color="bg-gradient-to-br from-red-100 to-red-200"
-            trend="Requiere atención"
+            trend={storedData.formData.conflictosPorRedesSociales === 'Sí' ? "Requiere atención" : "Estable"}
           />
         </div>
 
@@ -255,7 +348,7 @@ const Dashboard: React.FC = () => {
   };
 
   const AnalyticsView = () => {
-    if (!predictionData) return <div>Cargando datos...</div>;
+    if (!storedData) return <div>Cargando datos...</div>;
     
     return (
       <div className="space-y-6">
@@ -314,21 +407,21 @@ const Dashboard: React.FC = () => {
                 <AlertTriangle size={20} className="text-red-600 mr-2" />
                 <h4 className="font-semibold text-red-800">Alerta Crítica</h4>
               </div>
-              <p className="text-sm text-red-700">Solo {predictionData.horasSuenoPorNoche} horas de sueño detectadas. Riesgo alto para la salud.</p>
+              <p className="text-sm text-red-700">Solo {storedData.formData.horasSuenoPorNoche} horas de sueño detectadas. Riesgo alto para la salud.</p>
             </div>
             <div className="p-4 bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl border border-yellow-200">
               <div className="flex items-center mb-2">
                 <Brain size={20} className="text-yellow-600 mr-2" />
                 <h4 className="font-semibold text-yellow-800">Patrón Identificado</h4>
               </div>
-              <p className="text-sm text-yellow-700">Conflictos sociales {predictionData.conflictosPorRedesSociales === 'Sí' ? 'presentes' : 'no detectados'} con uso moderado de redes.</p>
+              <p className="text-sm text-yellow-700">Conflictos sociales {storedData.formData.conflictosPorRedesSociales === 'Sí' ? 'presentes' : 'no detectados'} con uso moderado de redes.</p>
             </div>
             <div className="p-4 bg-gradient-to-br from-green-50 to-green-100 rounded-xl border border-green-200">
               <div className="flex items-center mb-2">
                 <CheckCircle size={20} className="text-green-600 mr-2" />
                 <h4 className="font-semibold text-green-800">Aspecto Positivo</h4>
               </div>
-              <p className="text-sm text-green-700">{predictionData.afectaRendimientoAcademico === 'No' ? 'No hay impacto negativo' : 'Hay impacto negativo'} en el rendimiento académico.</p>
+              <p className="text-sm text-green-700">Salud mental: {storedData.results.saludMental}/10</p>
             </div>
           </div>
         </div>
@@ -337,7 +430,7 @@ const Dashboard: React.FC = () => {
   };
 
   const ReportsView = () => {
-    if (!predictionData) return <div>Cargando datos...</div>;
+    if (!storedData) return <div>Cargando datos...</div>;
     
     return (
       <div className="space-y-6">
@@ -352,19 +445,19 @@ const Dashboard: React.FC = () => {
               <div className="space-y-3">
                 <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg">
                   <span className="text-gray-600">Edad:</span>
-                  <span className="font-medium">{predictionData.edad} años</span>
+                  <span className="font-medium">{storedData.formData.edad} años</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
                   <span className="text-gray-600">Género:</span>
-                  <span className="font-medium">{predictionData.genero}</span>
+                  <span className="font-medium">{storedData.formData.genero}</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
                   <span className="text-gray-600">País:</span>
-                  <span className="font-medium">{predictionData.pais}</span>
+                  <span className="font-medium">{storedData.formData.pais}</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-yellow-50 rounded-lg">
                   <span className="text-gray-600">Nivel Académico:</span>
-                  <span className="font-medium">{predictionData.nivelAcademico}</span>
+                  <span className="font-medium">{storedData.formData.nivelAcademico}</span>
                 </div>
               </div>
             </div>
@@ -374,51 +467,53 @@ const Dashboard: React.FC = () => {
               <div className="space-y-3">
                 <div className="flex justify-between items-center p-3 bg-pink-50 rounded-lg">
                   <span className="text-gray-600">Plataforma Principal:</span>
-                  <span className="font-medium">{predictionData.plataformaMasUsada}</span>
+                  <span className="font-medium">{storedData.formData.plataformaMasUsada}</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-indigo-50 rounded-lg">
                   <span className="text-gray-600">Uso Diario:</span>
-                  <span className="font-medium">{predictionData.usoDialioHoras} horas</span>
+                  <span className="font-medium">{storedData.formData.usoDialioHoras} horas</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-red-50 rounded-lg">
                   <span className="text-gray-600">Horas de Sueño:</span>
-                  <span className="font-medium">{predictionData.horasSuenoPorNoche} horas</span>
+                  <span className="font-medium">{storedData.formData.horasSuenoPorNoche} horas</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-teal-50 rounded-lg">
                   <span className="text-gray-600">Estado Sentimental:</span>
-                  <span className="font-medium">{predictionData.estadoSentimental}</span>
+                  <span className="font-medium">{storedData.formData.estadoSentimental}</span>
                 </div>
               </div>
             </div>
           </div>
 
           <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-xl border border-purple-200">
-            <h4 className="font-semibold text-gray-800 mb-4">Predicciones del Modelo</h4>
+            <h4 className="font-semibold text-gray-800 mb-4">Resultados del Modelo</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex items-center justify-between p-4 bg-white rounded-lg shadow-sm">
                 <div className="flex items-center">
                   <GraduationCap className="text-blue-600 mr-3" size={24} />
-                  <span className="text-gray-700">Afecta Rendimiento Académico</span>
+                  <span className="text-gray-700">Impacto Académico</span>
                 </div>
                 <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                  predictionData.afectaRendimientoAcademico === 'No' 
-                    ? 'bg-green-100 text-green-800' 
-                    : 'bg-red-100 text-red-800'
+                  storedData.results.impactoAcademico === 'Alto' 
+                    ? 'bg-red-100 text-red-800' 
+                    : 'bg-green-100 text-green-800'
                 }`}>
-                  {predictionData.afectaRendimientoAcademico}
+                  {storedData.results.impactoAcademico}
                 </span>
               </div>
               <div className="flex items-center justify-between p-4 bg-white rounded-lg shadow-sm">
                 <div className="flex items-center">
                   <Users className="text-orange-600 mr-3" size={24} />
-                  <span className="text-gray-700">Conflictos por Redes Sociales</span>
+                  <span className="text-gray-700">Nivel de Adicción</span>
                 </div>
                 <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                  predictionData.conflictosPorRedesSociales === 'Sí' 
+                  storedData.results.nivelAdiccion > 3 
                     ? 'bg-red-100 text-red-800' 
-                    : 'bg-green-100 text-green-800'
+                    : storedData.results.nivelAdiccion > 2 
+                      ? 'bg-yellow-100 text-yellow-800'
+                      : 'bg-green-100 text-green-800'
                 }`}>
-                  {predictionData.conflictosPorRedesSociales}
+                  {storedData.results.nivelAdiccion}
                 </span>
               </div>
             </div>
@@ -428,27 +523,14 @@ const Dashboard: React.FC = () => {
         <div className="bg-white/70 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-white/50">
           <h4 className="font-semibold text-gray-800 mb-4">Recomendaciones Personalizadas</h4>
           <div className="space-y-3">
-            <div className="flex items-start p-4 bg-blue-50 rounded-lg">
-              <Clock className="text-blue-600 mr-3 mt-1" size={20} />
-              <div>
-                <p className="font-medium text-blue-800">Mejorar Higiene del Sueño</p>
-                <p className="text-sm text-blue-700 mt-1">Se recomienda aumentar las horas de sueño a 7-9 horas diarias para mejorar el bienestar general (actualmente {predictionData.horasSuenoPorNoche}h).</p>
+            {storedData.results.recomendaciones.map((recomendacion, index) => (
+              <div key={index} className="flex items-start p-4 bg-blue-50 rounded-lg">
+                <CheckCircle className="text-blue-600 mr-3 mt-1" size={20} />
+                <div>
+                  <p className="text-sm text-blue-700">{recomendacion}</p>
+                </div>
               </div>
-            </div>
-            <div className="flex items-start p-4 bg-amber-50 rounded-lg">
-              <AlertTriangle className="text-amber-600 mr-3 mt-1" size={20} />
-              <div>
-                <p className="font-medium text-amber-800">Gestión de Conflictos Sociales</p>
-                <p className="text-sm text-amber-700 mt-1">Considerar estrategias de comunicación digital y establecer límites saludables en redes sociales.</p>
-              </div>
-            </div>
-            <div className="flex items-start p-4 bg-green-50 rounded-lg">
-              <CheckCircle className="text-green-600 mr-3 mt-1" size={20} />
-              <div>
-                <p className="font-medium text-green-800">Mantener Rendimiento Académico</p>
-                <p className="text-sm text-green-700 mt-1">Continuar con las estrategias actuales que mantienen el rendimiento académico estable.</p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
@@ -456,7 +538,7 @@ const Dashboard: React.FC = () => {
   };
 
   const ProfileView = () => {
-    if (!predictionData) return <div>Cargando datos...</div>;
+    if (!storedData) return <div>Cargando datos...</div>;
     
     return (
       <div className="space-y-6">
@@ -480,27 +562,27 @@ const Dashboard: React.FC = () => {
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-600">Edad</label>
                   <div className="p-3 bg-gray-50 rounded-lg">
-                    <span className="font-medium">{predictionData.edad} años</span>
+                    <span className="font-medium">{storedData.formData.edad} años</span>
                   </div>
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-600">Género</label>
                   <div className="p-3 bg-gray-50 rounded-lg">
-                    <span className="font-medium">{predictionData.genero}</span>
+                    <span className="font-medium">{storedData.formData.genero}</span>
                   </div>
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-600">País</label>
                   <div className="p-3 bg-gray-50 rounded-lg flex items-center">
                     <Globe size={16} className="mr-2 text-gray-500" />
-                    <span className="font-medium">{predictionData.pais}</span>
+                    <span className="font-medium">{storedData.formData.pais}</span>
                   </div>
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-600">Estado Sentimental</label>
                   <div className="p-3 bg-gray-50 rounded-lg flex items-center">
                     <Heart size={16} className="mr-2 text-gray-500" />
-                    <span className="font-medium">{predictionData.estadoSentimental}</span>
+                    <span className="font-medium">{storedData.formData.estadoSentimental}</span>
                   </div>
                 </div>
               </div>
@@ -514,21 +596,21 @@ const Dashboard: React.FC = () => {
                     <Smartphone className="text-blue-600 mr-3" size={20} />
                     <span className="text-gray-700">Plataforma Principal</span>
                   </div>
-                  <span className="font-semibold text-blue-800">{predictionData.plataformaMasUsada}</span>
+                  <span className="font-semibold text-blue-800">{storedData.formData.plataformaMasUsada}</span>
                 </div>
                 <div className="flex items-center justify-between p-4 bg-gradient-to-r from-green-50 to-green-100 rounded-lg">
                   <div className="flex items-center">
                     <Clock className="text-green-600 mr-3" size={20} />
                     <span className="text-gray-700">Uso Diario</span>
                   </div>
-                  <span className="font-semibold text-green-800">{predictionData.usoDialioHoras} horas</span>
+                  <span className="font-semibold text-green-800">{storedData.formData.usoDialioHoras} horas</span>
                 </div>
                 <div className="flex items-center justify-between p-4 bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg">
                   <div className="flex items-center">
                     <Clock className="text-purple-600 mr-3" size={20} />
                     <span className="text-gray-700">Horas de Sueño</span>
                   </div>
-                  <span className="font-semibold text-purple-800">{predictionData.horasSuenoPorNoche} horas</span>
+                  <span className="font-semibold text-purple-800">{storedData.formData.horasSuenoPorNoche} horas</span>
                 </div>
               </div>
             </div>
@@ -542,21 +624,24 @@ const Dashboard: React.FC = () => {
                   <div className="w-16 h-16 bg-gradient-to-br from-red-400 to-red-600 rounded-full flex items-center justify-center mx-auto mb-2">
                     <AlertTriangle size={24} className="text-white" />
                   </div>
-                  <p className="text-sm font-medium text-red-800">Riesgo Moderado</p>
-                  <p className="text-xs text-red-600">Conflictos sociales {predictionData.conflictosPorRedesSociales === 'Sí' ? 'detectados' : 'no detectados'}</p>
+                  <p className="text-sm font-medium text-red-800">Nivel de Adicción</p>
+                  <p className="text-2xl font-bold text-red-600">{storedData.results.nivelAdiccion}</p>
+                  <p className="text-xs text-red-600">
+                    {storedData.results.nivelAdiccion > 3 ? 'Alto' : storedData.results.nivelAdiccion > 2 ? 'Moderado' : 'Bajo'}
+                  </p>
                 </div>
               </div>
             </div>
 
             <div className="bg-white/70 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-white/50">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">Nivel Académico</h3>
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">Salud Mental</h3>
               <div className="text-center">
                 <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-2">
-                  <GraduationCap size={24} className="text-white" />
+                  <Brain size={24} className="text-white" />
                 </div>
-                <p className="font-medium text-blue-800">{predictionData.nivelAcademico}</p>
+                <p className="text-2xl font-bold text-blue-600">{storedData.results.saludMental}/10</p>
                 <p className="text-xs text-blue-600 mt-1">
-                  {predictionData.afectaRendimientoAcademico === 'No' ? 'Sin impacto' : 'Con impacto'} en rendimiento
+                  {storedData.results.saludMental > 8 ? 'Excelente' : storedData.results.saludMental > 6 ? 'Buena' : 'Necesita mejora'}
                 </p>
               </div>
             </div>
@@ -663,7 +748,7 @@ const Dashboard: React.FC = () => {
             </p>
           </div>
 
-          <CurrentView />
+          {storedData && <CurrentView />}
         </div>
       </div>
     </div>
