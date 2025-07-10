@@ -168,20 +168,40 @@ const Prediction: React.FC = () => {
     };
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!validateForm()) return;
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-    setIsSubmitting(true);
-    
-    // Simular procesamiento
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    const prediction = generatePrediction(formData);
-    setResults(prediction);
+  if (!validateForm()) return;
+
+  setIsSubmitting(true);
+
+  try {
+    const response = await fetch('http://localhost:8000/formulario/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (!response.ok) {
+      // Aquí puedes manejar errores HTTP
+      throw new Error('Error en la respuesta del servidor');
+    }
+
+    const data = await response.json();
+
+    // Suponiendo que el backend devuelve un objeto con la misma forma que PredictionResults
+    setResults(data);
+
+  } catch (error) {
+    console.error('Error enviando formulario:', error);
+    // Puedes mostrar algún mensaje de error bonito aquí
+  } finally {
     setIsSubmitting(false);
-  };
+  }
+};
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -546,7 +566,7 @@ const Prediction: React.FC = () => {
                 <div className="bg-gradient-to-br from-[#F07167] to-[#FED9B7] p-6 rounded-xl text-white">
                   <TrendingUp className="w-8 h-8 mb-4" />
                   <h3 className="font-semibold mb-2">Nivel de Adicción</h3>
-                  <p className="text-3xl font-bold">{results.nivelAdiccion}/10</p>
+                  <p className="text-3xl font-bold">{results.nivelAdiccion}</p>
                 </div>
 
                 <div className="bg-gradient-to-br from-[#00AFB9] to-[#0081A7] p-6 rounded-xl text-white">
