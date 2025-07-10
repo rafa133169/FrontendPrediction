@@ -672,7 +672,7 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 pt-10">
       <div className="flex">
         {/* Sidebar */}
         <div className="w-64 bg-white/80 backdrop-blur-sm border-r border-white/50 p-6 min-h-screen">
