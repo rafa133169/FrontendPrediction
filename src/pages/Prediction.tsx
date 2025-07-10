@@ -37,6 +37,12 @@ interface PredictionResults {
   recomendaciones: string[];
 }
 
+interface SavedData {
+  formData: PredictionFormData;
+  results: PredictionResults;
+}
+
+
 const Prediction: React.FC = () => {
   const [formData, setFormData] = useState<PredictionFormData>({
     edad: '',
@@ -115,41 +121,46 @@ const Prediction: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+    if (!validateForm()) return;
 
-  if (!validateForm()) return;
+    setIsSubmitting(true);
 
-  setIsSubmitting(true);
+    try {
+      const response = await fetch('http://localhost:8000/formulario/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
-  try {
-    const response = await fetch('http://localhost:8000/formulario/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    });
+      if (!response.ok) {
+        throw new Error('Error en la respuesta del servidor');
+      }
 
-    if (!response.ok) {
-      // Aquí puedes manejar errores HTTP
-      throw new Error('Error en la respuesta del servidor');
+      const data = await response.json();
+
+      // Guardar los resultados en el estado
+      setResults(data);
+
+      // Guardar los datos del formulario y resultados en localStorage
+      const dataToSave: SavedData = {
+        formData: formData,
+        results: data
+      };
+      localStorage.setItem('predictionData', JSON.stringify(dataToSave));
+      window.location.href = '/dashboard';
+
+    } catch (error) {
+      console.error('Error enviando formulario:', error);
+      // Puedes mostrar algún mensaje de error bonito aquí
+    } finally {
+      setIsSubmitting(false);
     }
-
-    const data = await response.json();
-
-    // Suponiendo que el backend devuelve un objeto con la misma forma que PredictionResults
-    setResults(data);
-
-  } catch (error) {
-    console.error('Error enviando formulario:', error);
-    // Puedes mostrar algún mensaje de error bonito aquí
-  } finally {
-    setIsSubmitting(false);
-  }
-};
-
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
