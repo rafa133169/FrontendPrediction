@@ -3,6 +3,10 @@ import { MODELS } from '../utils/constants';
 import { Zap, BarChart3, Brain, Target, TrendingUp, Activity, Database } from 'lucide-react';
 
 const Models = () => {
+  const handleTestModels = () => {
+    window.location.href = '/prediction';
+  };
+
   const modelDetails = [
     {
       name: "Predicción de Nivel de Adicción",
@@ -239,6 +243,7 @@ const Models = () => {
             <motion.button
               whileHover={{ scale: 1.05, boxShadow: "0 25px 50px rgba(255, 255, 255, 0.2)" }}
               whileTap={{ scale: 0.95 }}
+              onClick={handleTestModels}
               className="bg-white text-[#F07167] px-12 py-4 rounded-full font-bold text-lg shadow-lg hover:bg-[#FDFCDC] transition-all"
             >
               Probar Modelos Ahora

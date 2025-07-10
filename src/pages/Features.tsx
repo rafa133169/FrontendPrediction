@@ -4,6 +4,10 @@ import FeatureCard from '../components/ui/FeatureCard';
 import { Brain, TrendingUp, Shield, Users, Clock, Heart } from 'lucide-react';
 
 const Features = () => {
+  const handleStartAnalysis = () => {
+    window.location.href = '/prediction';
+  };
+
   const detailedFeatures = [
     {
       icon: Brain,
@@ -168,6 +172,7 @@ const Features = () => {
             <motion.button
               whileHover={{ scale: 1.05, boxShadow: "0 25px 50px rgba(255, 255, 255, 0.2)" }}
               whileTap={{ scale: 0.95 }}
+              onClick={handleStartAnalysis}
               className="bg-white text-[#F07167] px-12 py-4 rounded-full font-bold text-lg shadow-lg hover:bg-[#FDFCDC] transition-all"
             >
               Comenzar Análisis Gratuito

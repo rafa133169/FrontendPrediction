@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Brain, Calculator, TrendingUp, AlertCircle, CheckCircle, ArrowRight } from 'lucide-react';
+import { Brain, Calculator, AlertCircle } from 'lucide-react';
 import Button from '../components/ui/Button';
 
 interface PredictionFormData {
@@ -175,23 +175,6 @@ const Prediction: React.FC = () => {
     if (errors[name as keyof FormErrors]) {
       setErrors(prev => ({ ...prev, [name]: undefined }));
     }
-  };
-
-  const resetForm = () => {
-    setFormData({
-      edad: '',
-      genero: '',
-      nivelAcademico: '',
-      pais: '',
-      usoDialioHoras: '',
-      plataformaMasUsada: '',
-      afectaRendimientoAcademico: '',
-      horasSuenoPorNoche: '',
-      estadoSentimental: '',
-      conflictosPorRedesSociales: ''
-    });
-    setResults(null);
-    setErrors({});
   };
 
   const fadeInUp = {
@@ -386,7 +369,7 @@ const Prediction: React.FC = () => {
                     <option value="Telegram">Telegram</option>
                     <option value="Snapchat">Snapchat</option>
                     <option value="Linkedin">Linkedin</option>
-                    <option value="Snapchat">Snapchat</option>
+                    <option value="Otro">Otro</option>
 
                   </select>
                   {errors.plataformaMasUsada && (
@@ -515,71 +498,7 @@ const Prediction: React.FC = () => {
               </Button>
             </form>
           </motion.div>
-        ) : (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8 }}
-            className="space-y-6"
-          >
-            {/* Resultados */}
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-[#FED9B7]/20">
-              <div className="flex items-center mb-6">
-                <CheckCircle className="w-8 h-8 text-green-600 mr-3" />
-                <h2 className="text-2xl font-bold text-[#0081A7]">Resultados de tu Predicción</h2>
-              </div>
-
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <div className="bg-gradient-to-br from-[#F07167] to-[#FED9B7] p-6 rounded-xl text-white">
-                  <TrendingUp className="w-8 h-8 mb-4" />
-                  <h3 className="font-semibold mb-2">Nivel de Adicción</h3>
-                  <p className="text-3xl font-bold">{results.nivelAdiccion}</p>
-                </div>
-
-                <div className="bg-gradient-to-br from-[#00AFB9] to-[#0081A7] p-6 rounded-xl text-white">
-                  <Brain className="w-8 h-8 mb-4" />
-                  <h3 className="font-semibold mb-2">Salud Mental</h3>
-                  <p className="text-3xl font-bold">{results.saludMental}/10</p>
-                </div>
-
-                <div className="bg-gradient-to-br from-[#0081A7] to-[#00AFB9] p-6 rounded-xl text-white">
-                  <Calculator className="w-8 h-8 mb-4" />
-                  <h3 className="font-semibold mb-2">Impacto Académico</h3>
-                  <p className="text-2xl font-bold">{results.impactoAcademico}</p>
-                </div>
-
-                <div className="bg-gradient-to-br from-[#FED9B7] to-[#F07167] p-6 rounded-xl text-white">
-                  <TrendingUp className="w-8 h-8 mb-4" />
-                  <h3 className="font-semibold mb-2">Plataforma Dominante</h3>
-                  <p className="text-xl font-bold">{results.plataformaDominante}</p>
-                </div>
-              </div>
-
-              {/* Recomendaciones */}
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
-                <h3 className="text-lg font-semibold text-[#0081A7] mb-4">Recomendaciones Personalizadas</h3>
-                <ul className="space-y-2">
-                  {results.recomendaciones.map((rec, index) => (
-                    <li key={index} className="flex items-start">
-                      <ArrowRight className="w-4 h-4 text-[#00AFB9] mr-2 mt-1 flex-shrink-0" />
-                      <span className="text-gray-700">{rec}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            <div className="flex justify-center">
-              <Button
-                onClick={resetForm}
-                variant="outline"
-                size="lg"
-              >
-                Realizar Nueva Predicción
-              </Button>
-            </div>
-          </motion.div>
-        )}
+        ) : null}
       </div>
     </div>
   );

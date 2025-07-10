@@ -6,6 +6,14 @@ const HeroSection = () => {
   const { scrollYProgress } = useScroll();
   const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
 
+  const handleStartAnalysis = () => {
+    window.location.href = '/prediction';
+  };
+
+  const handleViewDemo = () => {
+    window.location.href = '/prediction';
+  };
+
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-16">
       <motion.div
@@ -43,6 +51,7 @@ const HeroSection = () => {
           <motion.button
             whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(240, 113, 103, 0.3)" }}
             whileTap={{ scale: 0.95 }}
+            onClick={handleStartAnalysis}
             className="bg-gradient-to-r from-[#F07167] to-[#FED9B7] text-white px-8 py-4 rounded-full font-bold text-lg shadow-lg flex items-center space-x-2"
           >
             <span>Comenzar Análisis</span>
@@ -52,6 +61,7 @@ const HeroSection = () => {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            onClick={handleViewDemo}
             className="border-2 border-[#00AFB9] text-[#00AFB9] px-8 py-4 rounded-full font-bold text-lg hover:bg-[#00AFB9] hover:text-white transition-all"
           >
             Ver Demo

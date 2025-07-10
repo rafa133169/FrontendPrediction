@@ -2,6 +2,10 @@ import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 
 const CTASection = () => {
+  const handleStartNow = () => {
+    window.location.href = '/prediction';
+  };
+
   return (
     <section className="py-20 bg-gradient-to-br from-[#F07167] to-[#0081A7]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -22,6 +26,7 @@ const CTASection = () => {
           <motion.button
             whileHover={{ scale: 1.05, boxShadow: "0 25px 50px rgba(255, 255, 255, 0.2)" }}
             whileTap={{ scale: 0.95 }}
+            onClick={handleStartNow}
             className="bg-white text-[#F07167] px-12 py-4 rounded-full font-bold text-lg shadow-lg hover:bg-[#FDFCDC] transition-all flex items-center space-x-2 mx-auto"
           >
             <span>Comenzar Ahora</span>
