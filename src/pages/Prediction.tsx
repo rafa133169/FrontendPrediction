@@ -380,6 +380,14 @@ const Prediction: React.FC = () => {
                     <option value="Facebook">Facebook</option>
                     <option value="TikTok">TikTok</option>
                     <option value="YouTube">YouTube</option>
+                    <option value="Instagram">Instagram</option>
+                    <option value="Whatsapp">Whatsapp</option>
+                    <option value="X (Twitter)">X (Twitter)</option>
+                    <option value="Telegram">Telegram</option>
+                    <option value="Snapchat">Snapchat</option>
+                    <option value="Linkedin">Linkedin</option>
+                    <option value="Snapchat">Snapchat</option>
+
                   </select>
                   {errors.plataformaMasUsada && (
                     <p className="mt-1 text-sm text-red-600 flex items-center">
