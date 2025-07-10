@@ -6,6 +6,7 @@ import Features from './pages/Features';
 import Models from './pages/Models';
 import Contact from './pages/Contact';
 import Prediction from './pages/Prediction';
+import Dashboard from './DashboardPage';
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
             <Route path="/models" element={<Models />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/prediction" element={<Prediction />} />
+            <Route path="/dashboard" element={<Dashboard />} />
           </Routes>
         </main>
         <Footer />
