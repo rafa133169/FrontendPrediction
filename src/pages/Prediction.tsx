@@ -115,58 +115,6 @@ const Prediction: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const generatePrediction = (data: PredictionFormData): PredictionResults => {
-    // Simulación de predicción basada en los datos del formulario
-    const edad = Number(data.edad);
-    const usoHoras = Number(data.usoDialioHoras);
-    const horasSueno = Number(data.horasSuenoPorNoche);
-    
-    // Cálculo del nivel de adicción (0-10)
-    let nivelAdiccion = Math.min(10, Math.max(0, (usoHoras / 2.4) + 
-      (data.afectaRendimientoAcademico === 'Sí' ? 2 : 0) + 
-      (data.conflictosPorRedesSociales === 'Sí' ? 1.5 : 0) + 
-      (horasSueno < 6 ? 1 : 0)));
-
-    // Impacto académico
-    const impactoAcademico = data.afectaRendimientoAcademico === 'Sí' ? 'Alto' : 
-      usoHoras > 6 ? 'Medio' : 'Bajo';
-
-    // Salud mental (0-10, donde 10 es mejor)
-    let saludMental = Math.min(10, Math.max(0, 10 - 
-      (usoHoras / 3) - 
-      (data.conflictosPorRedesSociales === 'Sí' ? 2 : 0) - 
-      (horasSueno < 6 ? 1.5 : 0) + 
-      (data.estadoSentimental === 'En una relación' ? 1 : 0)));
-
-    // Recomendaciones
-    const recomendaciones = [];
-    if (nivelAdiccion > 7) {
-      recomendaciones.push('Considera reducir significativamente el tiempo en redes sociales');
-    }
-    if (usoHoras > 6) {
-      recomendaciones.push('Establece límites de tiempo diario para redes sociales');
-    }
-    if (horasSueno < 7) {
-      recomendaciones.push('Mejora tus hábitos de sueño evitando pantallas antes de dormir');
-    }
-    if (data.conflictosPorRedesSociales === 'Sí') {
-      recomendaciones.push('Practica el uso consciente de redes sociales');
-    }
-    if (data.afectaRendimientoAcademico === 'Sí') {
-      recomendaciones.push('Crea espacios libres de distracciones digitales para estudiar');
-    }
-    if (recomendaciones.length === 0) {
-      recomendaciones.push('Mantén tus buenos hábitos digitales actuales');
-    }
-
-    return {
-      nivelAdiccion: Math.round(nivelAdiccion * 10) / 10,
-      impactoAcademico,
-      plataformaDominante: data.plataformaMasUsada,
-      saludMental: Math.round(saludMental * 10) / 10,
-      recomendaciones
-    };
-  };
 
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
